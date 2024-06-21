@@ -1,20 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { View, Text, Image, ScrollView, Button, Pressable, Modal, StatusBar, ActivityIndicator, Alert } from "react-native";
+import icon from "./assets/adaptive-icon.png";
+import { useState } from "react";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Hello, World!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  const [modalVisibility, setModalVisibility] = useState(false);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  return (
+    null
+  )
+}
