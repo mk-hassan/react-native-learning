@@ -308,3 +308,125 @@ The shape of alert could have slight difference between platforms.
   </Pressable>
 </View >
 ```
+---
+---
+## Styling
+
+Inline styling is not a recommended approach in react-native, and rarely could be found in the code base. The preferred method is to use the StyleSheet API.
+
+### 1. Why using StyleSheet API better ?
+> - By moving the styles away from the render function, you make the code easier to read and understand.
+> - Naming the styles adds meaning to the low level components in the render function.
+> - Makes the code reusable and easier to maintain.
+--- 
+> [!NOTE]
+> - The keys in the object passed to the create function can have any name but it's recommended to have sematic meanings.
+> - Each value must be an object contains (key, value) pairs similar to CSS properties but in javascript.
+
+```javascript
+export default function App() {
+  return (
+    <View style={styles.container}>
+      // Now we expect this Text to be the title of the page by just using a meaningful name.
+      <Text style={styles.title}>Welcome</Text> 
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 50,
+    flex: 1,
+    backgroundColor: "midnightblue"
+  },
+  title: {
+    color: "gray",
+    fontSize: 50,
+    fontWeight: "bolder"
+  }
+});
+```
+
+### 2. Applying multiple styles
+
+1. You can apply multiple styles to a component using the array syntax.
+2. When mergin styles the value from the last style in the array takes precendance.
+
+```javascript
+export default function App() {
+  return (
+    <View style={styles.container}>
+      // the background color from box will be applied, (refer to point 2 above)
+      <View style={[styles.lightBox, styles.box]}> 
+        <Text style={styles.title}>Welcome</Text>
+      </View>
+      <View style={[styles.box, styles.darkBox]}>
+        <Text style={styles.title}>Welcome</Text>
+      </View>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 50,
+    flex: 1,
+    backgroundColor: "midnightblue"
+  },
+  box: {
+    width: 300,
+    height: 200,
+    padding: 10,
+    backgroundColor: "pink",
+  },
+  lightBox: {
+    backgroundColor: "white",
+  },
+  darkBox: {
+    backgroundColor: "black",
+  },
+  title: {
+    color: "gray",
+    fontSize: 50,
+    fontWeight: "bolder"
+  }
+});
+```
+
+### 3. Box models
+
+elements' box model in react native is the same as it was in react, margin > border > padding > conntent.
+
+> [!CAUTION]
+> All dimensions in react-native are unitless and represent density independant pixels.
+> Parent components can use percentage values.
+
+> [!CAUTION]
+> borderRadius is applicable to the view component across both platforms, but for the text component it only applies to the android. The solution is to wrap your text using View component and apply the borderRadius to the View component instead.
+
+> [!TIP]
+> There're 2 more properties in react-native related to padding and margin which are {padding-margin}{Horizonal-Vertical} to specify {left, right-top, bottom} .
+
+> [!TIP]
+> box-shadow: h-offset v-offset blur spread color (css style for box shadow) \n
+> But in react native there are 4 different properties to specify those values while the h-offset and v-offset are grouped in one property.
+> 1. shadowColor: "orange", # color
+> 2. shadowOffset: {\
+>    width: 0, # horizonal offset +-ve \
+>    height: 300, # vertical offset +-ve \
+>   },
+> 3. shadowOpacity: 1, # transparency value(sperad in css) [0 (transparent), 1 (complete opacity)]
+> 4. shadowRadius: 20 # blur radius, a larger value creates a larger and lighter blur
+
+> [!CAUTION]
+> There are no common styles to apply shadows on both in both ios and android, to add box shadows in android we have to use the elevation property which makes use internally the elevation android api.\
+> androidBoxShadow: { \
+>   elevation: 10, \
+> }
+
+> [!NOTE]
+> shadowColor is the only box shadow property that works on both ios and android.
+
+### 4. Inheritance
+> [!CAUTION]
+> There is no style inheritance from View to nested Text, but there is from Text to nested Text components.
