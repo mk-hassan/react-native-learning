@@ -483,8 +483,306 @@ flexGrow: '<positive number»', flexShrink: 1, flexBasis: 0]
 
 ## Dynamic User Interfaces
 
+### Address responsive styles based on the device size
+
 > [!NOTE]
-> The app's users won't all be using identical devices. Device sizes may vary, ranging from more compact phones to larger devices like iPads or Android tablets. We must ensure that our app's user interface remains responsive to these
-different device sizes while maintaining an `optimal user experience` .\
-On the same device, a user might opt for `portrait mode`, while another prefers
-`landscape orientation` .
+> The app's users won't all be using identical devices. Device sizes may vary, ranging from more compact phones to larger devices like iPads or Android tablets. We must ensure that our app's user interface remains responsive to these different device sizes while maintaining an `optimal user experience` .\
+On the same device, a user might opt for `portrait mode`, while another prefers `landscape orientation` .
+
+> [!TIP]
+> One possible solution to handle this issue, is by using percentage: \
+> ```javascript
+> const styles = StyleSheet.create({
+>  container: {...},
+>  box: {
+>    width: "70%",
+>    height: "40%",
+>    ...
+>  },
+>  text: {...}
+> });
+> ```
+> but this approach has 2 drawbacks:
+> 1. Text can't be adjusted by percentage unit. 
+> 2. Devices with same height but different widths, think about iphons and ipads.
+
+> [!TIP]
+> The other solution, is to use the `Dimensions` API, by getting the width and height of the device you adjust your styles.
+> ```javascript
+> const { width,  height } = Dimensions.get("window/screen")
+> ```
+> window => refers to the visible area of the screen occupied  by the apps UI.\
+> screen => refers to the entire physical display of your device including areas that might be outside the visible viewport dueto notches, statusbars or system navbars.\
+> > For tasks involving UI elements within your application's visible area, use window.  
+
+```javascript
+const { width, height } = Dimensions.get('window');
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "plum",
+  },
+  box: {
+    width: width > 500 ? "70%" : "90%",
+    height: height > 600 ? "60%" : "90%",
+    backgroundColor: "lightblue",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  text: {
+    fontSize: width > 500 ? 50 : 24,
+  }
+});
+```
+
+> [!CAUTION] Drawback of Dimensions API
+> Device Dimensions can change when the screen orientation changes and unfortunately Dimentions API doesn't update with these changes.
+> The values of width and height don't dynamically update when the window dimensions changes, either due to orientation changes or more complex senarios such as foldable phones.
+
+> [!NOTE] expo default settings "orientation": "portrait"
+> In app.json file you can find that the `orientation` property is set to `protrait` which makes the device to not responding to `landscape` mode when the device rotated. To solve this issue set `"orientation": "default"`, this will make the content on the screen to adjust to both landscape and portrait modes(only the content rotates without any adjustments happened).\
+> This not solving the problem of Dimensions API, again the problem isn't to flip the content horizontally or vertically when the device rotates, but to adjust the styles depending on the current width and height of your screen.
+
+> [!NOTE] Solution to Dimentions API
+> Dimensions API is actually listening to the change in window sizes, but the porblem is that it doesn't rerender the component again to be updated its styles related to new window sizes. So the problem now is the rerendering of the component when the sizes changes and the solution to such problem is by using `useState` with `useEffect`, and update the state variable.
+
+The following code proves that Dimensions is actually listens to the changes but the problem there's no effect on the component because of the rerendering.
+
+```javascript
+import { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Dimensions } from "react-native";
+
+export default function App() {
+  const [dims, setDims] = useState({
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height
+  });
+
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener('change', ({ window }) => console.log(window));
+    return () => subscription?.remvoe();
+  });
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.box}>
+        <Text style={styles.text}>Welcome!</Text>
+      </View>
+    </View>
+  );
+}
+// output
+~ LOG  {"fontScale": 1, "height": 430, "scale": 3, "width": 932} // Horizontal
+~ LOG  {"fontScale": 1, "height": 932, "scale": 3, "width": 430} // Vertical
+```
+
+The solution
+```javascript
+import { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Dimensions } from "react-native";
+
+export default function App() {
+  const [dims, setDims] = useState({
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height
+  });
+
+  useEffect(() => {
+    Dimensions.addEventListener('change', ({ window }) => {
+      setDims({
+        width: window.width,
+        height: window.height
+      })
+    });
+    return () => subscription?.remvoe(); // clean up
+  })
+
+  return (
+    <View style={styles.container}>
+      <View style={[styles.box, { width: dims.width > 500 ? "70%" : "90%", height: dims.height > 600 ? "60%" : "90%" }]}>
+        <Text style={[styles.text, { fontSize: dims.width > 500 ? 50 : 24 }]}>Welcome!</Text>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {...},
+  box: {...},
+  text: {...}
+});
+```
+
+> [!TIP] useWindowDimentions Hook (the go-to approach for responsive designs)
+> Even the previous code is working, the code is hard to understand. Another better solution is to use "useWindowDimentions" Hook.
+
+```javascript
+import { View, Text, StyleSheet, useWindowDimensions } from "react-native";
+
+export default function App() {
+  const { width, height } = useWindowDimensions();
+
+  return (
+    <View style={styles.container}>
+      <View style={[styles.box, { backgroundColor: width > 500 ? "red" : "lightblue", width: width > 500 ? "70%" : "90%", height: height > 600 ? "60%" : "90%" }]}>
+        <Text style={[styles.text, { fontSize: width > 500 ? 100 : 24 }]}>Welcome!</Text>
+      </View>
+    </View>
+  );
+}
+```
+
+### Platform specific code (Address responsiveness based on the device platform)
+
+When developing a cross-platform app, maximizing the code reuse is a priority. However there are situations where it become necessary to tailor your code to specific platforms.
+
+> [!TIP] React-Native platform specific code approaches
+> React-Native offers 2 approaches for organizing and separating plat-form specific code
+> 1. Platform module.
+> 2. Platorm-specific file exptensions.
+
+#### 1. Platform module (When small part of the component is platform specific)
+
+> [!TIP] Using Platform module
+> ```javascript
+> // Detects the platform on which the app is running, and conditionally changes the styles.
+> import { Platform } from "react-native";
+> ```
+
+Changing the background color, midnightblue on ios and orange on android
+```javascript
+import { StyleSheet, Platform } from "react-native";
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Platform.OS === "ios" ? "midnightblue" : "orange",
+  },
+});
+```
+
+> [!TIP] What's Platform module for?
+> While `Platform.OS` suitable for small changes, a better option for more comprehensive platform specific styles is to use `Platform.select`.
+
+Changing font style on ios and android using Platform.select
+```javascript
+const styles = StyleSheet.create({
+  container: {...},
+  box: {...},
+  text: {
+    // notice the spread operator before Platform.select
+    ...Platform.select({ 
+      ios: {
+        // some styles related to ios
+      },
+      android: {
+        // some styles related to android
+      },
+    }),
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+});
+```
+> [!NOTE] how does Platform.select works?
+> It detects the platform of the device running the application, and then return the value related to the platform name. Using the spread operator is to get the (key, value) pairs or styles from the object and use them in `StyleSheet.create`.
+
+#### Platorm-specific file extensions (More complex senarios)
+
+> Used for more complex apperances or behaviors accross the 2 platforms using .ios and .android ext. 
+
+> [!NOTE] How does Platorm-specific file extensions work?
+> In this approach you split your code into separate `same-name` files with `.android` and `.ios` extensions `before the file's main extension`. react native detects the extension and loads the relevant platform file when required by other components.
+> creating new component that's platform specific should be: `newComponent.android.js` , `newComponent.ios.js`. When importing the component to use it we only use the filename without the exptensions, and reactnative will decide which one to use.
+
+```javascript
+// components > CustonButton.ios.js
+import { Pressable, Text } from "react-native";
+export default const CustomButton = ({ onPress, title }) => (
+  <Pressable
+    onPress={onPress}
+    style={{
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "lightblue",
+      borderRadius: 20, // diff
+      padding: 5, // diff
+    }}
+  >
+    <Text style={{ color: "purple", fontSize: 18 }}>{title}</Text> // diff
+  </Pressable>
+);
+```
+
+```javascript
+// components > CustonButton.android.js
+import React from "react";
+import { Pressable, Text } from "react-native";
+
+export default const CustomButton = ({ onPress, title }) => (
+  <Pressable
+    onPress={onPress}
+    style={{
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "lightblue",
+      borderRadius: 5, // diff
+      padding: 10, // diff
+    }}
+  >
+    <Text style={{ color: "blue", fontSize: 18 }}>{title}</Text> // diff
+  </Pressable>
+);
+```
+
+```javascript
+// App.js
+import { View, Text, StyleSheet, useWindowDimensions, Platform } from "react-native";
+import CustomButton from "./components/CustomButton"; // note the import
+
+export default function App() {
+  const { width, height } = useWindowDimensions();
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.box}>
+        <Text style={styles.text}>Welcome!</Text>
+        <CustomButton title={`Hello, from ${Platform.OS}`} onPress={() => console.log("Pressed")} />
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "plum",
+    paddingTop: Platform.OS === "ios" ? 64 : 0,
+  },
+  box: {
+    padding: 20,
+  },
+  text: {
+    ...Platform.select({
+      ios: {
+        color: "purple",
+        fontSize: 24,
+        fontStyle: "italic",
+      },
+      android: {
+        color: "blue",
+        fontSize: 30,
+      },
+    }),
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+});
+```
+
+> the previous example is not complex and can be done using `Platform.select` but just to showcase.
