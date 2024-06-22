@@ -451,3 +451,32 @@ elements' box model in react native is the same as it was in react, margin > bor
 
 > [!NOTE]
 > The default value for `alignSelf` property isnot `stretch` but `auto`, and it interits its value from  `alignItems` property of the parent flex continer.
+
+> [!NOTE]
+> alignItems: aligns indevidual items along the cross-axis
+> alignContent: aligns lines of content along the cross-axis
+> A very important condition to use alignContent, is that there must be multiple rows or columns exist within the container.
+
+> [!NOTE]
+> flex property in react native is the same as it's in css. It's just used to distribute the remaining space in the parent container on the elements applying it, but makes flexShrink to 1 and flexBasis to 0.
+
+> [!CAUTION]
+> The available space is distributed proportinally wiht respect to the flex basis and not (width & height) properties.
+
+> [!NOTE]
+> flexShrink default value is 0 and not 1 like in css. It works only when the combined size of  flex items exceeds the container's size. Note that also the flexShrink factor is relative to other items within the container.
+
+> [!NOTE]
+> flex vs flexGrow
+When flex is set to a positive number, it is equivalent to setting flexGrow with the
+same positive number \
+flex also implicitly sets flexShrink to 1 and flexBasis to 0 \
+flex: positive number>
+flexGrow: '<positive number»', flexShrink: 1, flexBasis: 0]
+
+> [!CAUTION] "FlexBasis: 0" I don't  know if its true or not, but I will write it anyway to modify it when I became pretty sure what it does.
+> flexBasis isn't the same as it's in css, flexBasis: 0 makes the item to be exactly 0 not min-content like in css.
+
+> [!NOTE]
+> `position: "relative"` is the default value of position attribute.\
+> Every element by default has `position: "relative"`.
