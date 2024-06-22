@@ -308,6 +308,51 @@ The shape of alert could have slight difference between platforms.
   </Pressable>
 </View >
 ```
+
+### 12. SafeAreaView
+
+consider the following code
+```javascript
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <View style={styles.box}>
+        <Text style={styles.text}>Welcome</Text>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "plum",
+  },
+  box: {
+    padding: 20,
+  },
+  text: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+});
+```
+This code works good on Android devices, but showing nothing on iphone 14 Pro Max because the text is hidden behind the notch. we can tackle this problem by adding some marginTop or paddingTop to make the text visible, but this adds unnessasary space at the top of android, also another device may have a notch on a different place.
+
+> [!TIP] Solution for the problem
+> Finding the safe area for a given device and render our application only within that View. That what the `SafeAreaView` is for.to render content within the safe area boundries of a device, it applies paddingg to reflect the physical limitation of the screen such as rounded corners and camera notches.
+
+```javascript
+// wrap you entire jsx inside SafeAreaView
+<SafeAreaView style={{ flex: 1, backgroundColor: "plum" }}>
+  <View style={styles.container}>
+    <View style={styles.box}>
+      <Text style={styles.text}>Welcome</Text>
+    </View>
+  </View>
+</SafeAreaView>
+```
 ---
 ---
 ## Styling
