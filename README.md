@@ -430,3 +430,11 @@ elements' box model in react native is the same as it was in react, margin > bor
 ### 4. Inheritance
 > [!CAUTION]
 > There is no style inheritance from View to nested Text, but there is from Text to nested Text components.
+
+## Flex-box Layout
+
+> [!NOTE]
+> when working with flex-box we encounter 2 axes (main axis, cross axis).
+> In react-native the main-axis is from top -> bottom while the cross axis is from left -> right.
+
+> Once you grasp the concepts of Flexbox, you'll have a solid understanding of how layouts are created in react-native.
