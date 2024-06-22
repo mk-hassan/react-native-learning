@@ -480,3 +480,11 @@ flexGrow: '<positive number»', flexShrink: 1, flexBasis: 0]
 > [!NOTE]
 > `position: "relative"` is the default value of position attribute.\
 > Every element by default has `position: "relative"`.
+
+## Dynamic User Interfaces
+
+> [!NOTE]
+> The app's users won't all be using identical devices. Device sizes may vary, ranging from more compact phones to larger devices like iPads or Android tablets. We must ensure that our app's user interface remains responsive to these
+different device sizes while maintaining an `optimal user experience` .\
+On the same device, a user might opt for `portrait mode`, while another prefers
+`landscape orientation` .
