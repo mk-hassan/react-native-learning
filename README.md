@@ -1,5 +1,36 @@
 # Learning React-Native notes
 
+<!-- TOC -->
+
+- [Learning React-Native notes](#learning-react-native-notes)
+  - [creating app using expo framework](#creating-app-using-expo-framework)
+  - [Core Components](#core-components)
+    - [View](#view)
+    - [Text](#text)
+    - [Image](#image)
+    - [ImageBackgrgound](#imagebackgrgound)
+    - [ScrollView](#scrollview)
+    - [Button (Allow users to trigger actions)](#button-allow-users-to-trigger-actions)
+    - [Pressable](#pressable)
+    - [Modal](#modal)
+    - [StatusBar](#statusbar)
+    - [ActivityIndicator](#activityindicator)
+    - [Alert](#alert)
+    - [SafeAreaView](#safeareaview)
+  - [Styling](#styling)
+    - [Why using StyleSheet API better ?](#why-using-stylesheet-api-better-)
+    - [Applying multiple styles](#applying-multiple-styles)
+    - [Box models](#box-models)
+    - [Inheritance](#inheritance)
+  - [Flex-box Layout](#flex-box-layout)
+  - [Dynamic User Interfaces](#dynamic-user-interfaces)
+    - [Address responsive styles based on the device size](#address-responsive-styles-based-on-the-device-size)
+    - [Platform specific code (Address responsiveness based on the device platform)](#platform-specific-code-address-responsiveness-based-on-the-device-platform)
+      - [Platform module (When small part of the component is platform specific)](#platform-module-when-small-part-of-the-component-is-platform-specific)
+      - [Platorm-specific file extensions (More complex senarios)](#platorm-specific-file-extensions-more-complex-senarios)
+
+<!-- /TOC -->
+
 ## creating app using expo framework
 
 > \> npx create-expo-app@latest \<app-name> --template blank
@@ -12,7 +43,7 @@ without `--template blank` there will be a large content with lots of files whic
 
 ## Core Components
 
-### 1. View
+### View
 ```javascript
 <View style={{ flex: 1, flexDirection: "row", backgroundColor: "plum" }}>
   <View style={{ width: 200, backgroundColor: "white" }}></View>
@@ -21,7 +52,7 @@ without `--template blank` there will be a large content with lots of files whic
 ```
 Supporting `nesting`, `styling`, `layout` `using flexbox`, `touch handeling`, `accessability control`.
 
-### 2. Text
+### Text
 ```javascript
 <View style={{ flex: 1, flexDirection: "row", backgroundColor: "red" }}>
   <View style={{ width: "50%", backgroundColor: "white", justifyContent: "center", alignItems: "center" }}>
@@ -33,7 +64,8 @@ Supporting `nesting`, `styling`, `layout` `using flexbox`, `touch handeling`, `a
 </View>
 ```
 supporting `nesting`, `styling`, `touch handeling`.
-### 3. Image
+
+### Image
 ```javascript
 <View style={{ flex: 1, backgroundColor: "red", paddingTop: 100 }}>
   <Image source={icon} style={{ width: "100%", height: 300 }} />
@@ -42,7 +74,7 @@ supporting `nesting`, `styling`, `touch handeling`.
 ```
 Not supoorting `nesting`.
 
-### 4. ImageBackgrgound
+### ImageBackgrgound
 ```javascript
 <View style={{ flex: 1, backgroundColor: "purple", paddingTop: 100 }}>
   <ImageBackground source={icon} style={{ flex: 1 }}>
@@ -52,7 +84,7 @@ Not supoorting `nesting`.
 ```
 supporting: `nesting`.
 
-### 5. ScrollView
+### ScrollView
 > [!NOTE]
 > Although `<View>` component is like `<div>` tag it's not scrolling automatically.
 > So How can we view the entire content? Using `ScrollView` component.
@@ -89,7 +121,7 @@ The previous code doesn't show the end of the page properly because of the `padd
 </View>
 ```
 
-### 6. Button (Allow users to trigger actions)
+### Button (Allow users to trigger actions)
 
 > [!NOTE]
 > Button component has platform-specific rendering for ios and android. Sulry we can handle it using custom styling.
@@ -114,7 +146,7 @@ The previous code doesn't show the end of the page properly because of the `padd
 </View >
 ```
 
-### 7. Pressable
+### Pressable
 There are times when we need to triger actions on the press of other elements such as image or text.
 > [!NOTE]
 > Pressable is a wrapper component that detects verious stages oof press interactions on its defined childrean.
@@ -155,7 +187,7 @@ There are times when we need to triger actions on the press of other elements su
 </View >
 ```
 
-### 8. Modal
+### Modal
 
 Modal is a screen that overlays the app content to provide important information or prompt the user for a decision.
 
@@ -210,7 +242,7 @@ export default function App() {
 ```
 ---
 
-### 9. StatusBar
+### StatusBar
 
 Allows you to control the application's StatusBar.
 The statusbar is the zone, typically at the top of the screen, that displays the current time, wifi and network info, bttary level and other status icons.
@@ -253,7 +285,7 @@ export default function App() {
 ```
 ---
 
-### 10. ActivityIndicator
+### ActivityIndicator
 
 Displays a circular loading indicator. It's used to inform users about the status of an ongoing process, such as loading the app, submitting a form, or saving changes.
 
@@ -278,7 +310,7 @@ Highlighted props:
 
 ---
 
-### 11. Alert
+### Alert
 
 It serves more as an API than a typical component. You invoke methods that generate UI elements.
 
@@ -309,7 +341,7 @@ The shape of alert could have slight difference between platforms.
 </View >
 ```
 
-### 12. SafeAreaView
+### SafeAreaView
 
 consider the following code
 ```javascript
@@ -355,11 +387,12 @@ This code works good on Android devices, but showing nothing on iphone 14 Pro Ma
 ```
 ---
 ---
+
 ## Styling
 
 Inline styling is not a recommended approach in react-native, and rarely could be found in the code base. The preferred method is to use the StyleSheet API.
 
-### 1. Why using StyleSheet API better ?
+### Why using StyleSheet API better ?
 > - By moving the styles away from the render function, you make the code easier to read and understand.
 > - Naming the styles adds meaning to the low level components in the render function.
 > - Makes the code reusable and easier to maintain.
@@ -392,7 +425,7 @@ const styles = StyleSheet.create({
 });
 ```
 
-### 2. Applying multiple styles
+### Applying multiple styles
 
 1. You can apply multiple styles to a component using the array syntax.
 2. When mergin styles the value from the last style in the array takes precendance.
@@ -438,7 +471,7 @@ const styles = StyleSheet.create({
 });
 ```
 
-### 3. Box models
+### Box models
 
 elements' box model in react native is the same as it was in react, margin > border > padding > conntent.
 
@@ -472,7 +505,7 @@ elements' box model in react native is the same as it was in react, margin > bor
 > [!NOTE]
 > shadowColor is the only box shadow property that works on both ios and android.
 
-### 4. Inheritance
+### Inheritance
 > [!CAUTION]
 > There is no style inheritance from View to nested Text, but there is from Text to nested Text components.
 
@@ -689,7 +722,7 @@ When developing a cross-platform app, maximizing the code reuse is a priority. H
 > 1. Platform module.
 > 2. Platorm-specific file exptensions.
 
-#### 1. Platform module (When small part of the component is platform specific)
+#### Platform module (When small part of the component is platform specific)
 
 > [!TIP] Using Platform module
 > ```javascript
