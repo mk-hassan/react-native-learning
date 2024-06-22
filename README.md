@@ -438,3 +438,16 @@ elements' box model in react native is the same as it was in react, margin > bor
 > In react-native the main-axis is from top -> bottom while the cross axis is from left -> right.
 
 > Once you grasp the concepts of Flexbox, you'll have a solid understanding of how layouts are created in react-native.
+
+> Flex container takes only the space required by its childrean.
+
+> justifyContent propery align the items based on the main axis.
+
+> alignItems property align the items based on the cross axis, same as justifyContent but on the other direction.
+
+> [!TIP]
+> alignItems: "baseline",makes the text inside each item is aligned, it doesn't matter how tall or what the paddings on each of these items.
+> ![baseline value for alignItems](<assets/baseline value for alignItems.png>)
+
+> [!NOTE]
+> The default value for `alignSelf` property isnot `stretch` but `auto`, and it interits its value from  `alignItems` property of the parent flex continer.
