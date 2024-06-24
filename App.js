@@ -8,7 +8,13 @@ export default function App() {
     <SafeAreaView style={styles.safeAreaContainer}>
       <ScrollView style={styles.cardsContainer} contentContainerStyle={{ gap: 20 }}>
         {
-          charactersData.map(cardData => <PokemonCard key={cardData.name} {...cardData} />)
+          charactersData.map(cardData =>
+            <PokemonCard key={cardData.name} {...cardData}>
+              <PokemonCard.Title name={cardData.name} hp={cardData.hp} />
+              <PokemonCard.CharacterImage {...cardData} />
+              <PokemonCard.CharacterInfo {...cardData} />
+            </PokemonCard>
+          )
         }
       </ScrollView>
     </SafeAreaView>

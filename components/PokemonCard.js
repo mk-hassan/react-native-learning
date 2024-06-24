@@ -1,26 +1,40 @@
-import { View, StyleSheet } from 'react-native';
-import CardTitle from './CardTitle';
-import CharacterImage from './CharacterImage';
-import CharacterInfo from './CharacterInfo';
+import { View, Text, Image } from 'react-native';
+import Imgs from '../modules/characterImagesLoader';
+import { PokemonCardStyles, TitleComponentStyles, CharacterImagesStyles, CharacterInfoStyles } from './styles/pokemonCardStyles';
 
-export default function PokemonCard({ name, image, hpLevel, ability, color, emoji, moves, weaknesses }) {
+export default function PokemonCard({ children }) {
   return (
-    <View style={styles.cardMainStyle}>
-      <CardTitle title={name} hp={hpLevel} />
-      <CharacterImage {...{ name, color, emoji, ability, image }} />
-      <CharacterInfo {...{ color, moves, weaknesses }} />
+    <View style={PokemonCardStyles.cardMainStyle}>
+      {children}
     </View>
   )
 }
 
-const styles = StyleSheet.create({
-  cardMainStyle: {
-    backgroundColor: "white",
-    borderColor: "black",
-    borderStyle: "solid",
-    borderWidth: 2,
-    borderRadius: 10,
-    padding: 20,
-    gap: 10,
-  }
-});
+PokemonCard.Title = ({ name, hp }) => {
+  return (
+    <View style={TitleComponentStyles.titleContainer}>
+      <Text style={TitleComponentStyles.characterName}>{name}</Text>
+      <Text style={TitleComponentStyles.hpLevel}>❤️HP: {hp}</Text>
+    </View>
+  )
+};
+
+PokemonCard.CharacterImage = ({ name, color: borderColor, emoji, ability }) => {
+  return (
+    <View style={{ alignItems: "center" }}>
+      <Image source={Imgs[name]} style={CharacterImagesStyles.characterImage} />
+      <View style={[CharacterImagesStyles.abilityContainer, { borderColor }]}>
+        <Text style={CharacterImagesStyles.ability}>{`${emoji} ${ability}`}</Text>
+      </View>
+    </View>
+  )
+}
+
+PokemonCard.CharacterInfo = ({ color, moves, weaknesses }) => {
+  return (
+    <View>
+      <Text style={CharacterInfoStyles.fields}><Text style={{ color }}>Moves</Text> : {moves.join(', ')}</Text>
+      <Text style={CharacterInfoStyles.fields}><Text style={{ color: "red" }}>Weaknesses</Text> : {weaknesses.join(', ')}</Text>
+    </View>
+  )
+}
