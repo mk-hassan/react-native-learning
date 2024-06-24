@@ -22,11 +22,11 @@ PokemonCard.Title = ({ name, hp }) => {
 PokemonCard.CharacterImage = ({ name, color: borderColor, emoji, ability }) => {
   return (
     <View style={{ alignItems: "center" }}>
-      <Image source={Imgs[name]} style={CharacterImagesStyles.characterImage} />
+      <Image source={Imgs[name]} style={CharacterImagesStyles.characterImage} resizeMode="contain" />
       <View style={[CharacterImagesStyles.abilityContainer, { borderColor }]}>
         <Text style={CharacterImagesStyles.ability}>{`${emoji} ${ability}`}</Text>
       </View>
-    </View>
+    </View >
   )
 }
 

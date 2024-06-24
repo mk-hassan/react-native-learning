@@ -28,6 +28,11 @@ const TitleComponentStyles = StyleSheet.create({
 });
 
 const CharacterImagesStyles = StyleSheet.create({
+  characterImage: {
+    width: "100%",
+    height: 300,
+    marginBottom: 20,
+  },
   abilityContainer: {
     borderRadius: 10,
     borderWidth: 3,
@@ -36,11 +41,6 @@ const CharacterImagesStyles = StyleSheet.create({
   ability: {
     fontSize: 18,
     fontWeight: "bold",
-  },
-  characterImage: {
-    width: 300,
-    height: 300,
-    marginBottom: 20
   }
 })
 

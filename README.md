@@ -28,7 +28,9 @@
     - [Platform specific code (Address responsiveness based on the device platform)](#platform-specific-code-address-responsiveness-based-on-the-device-platform)
       - [Platform module (When small part of the component is platform specific)](#platform-module-when-small-part-of-the-component-is-platform-specific)
       - [Platorm-specific file extensions (More complex senarios)](#platorm-specific-file-extensions-more-complex-senarios)
+  - [Pokemon cards image crop issue](#pokemon-cards-image-crop-issue)
 
+<!-- /TOC -->
 <!-- /TOC -->
 
 ## creating app using expo framework
@@ -864,3 +866,7 @@ const styles = StyleSheet.create({
 ```
 
 > the previous example is not complex and can be done using `Platform.select` but just to showcase.
+
+## Pokemon cards image crop issue
+
+> using resizeMode="contain" prop in Image component should fix the bugs issued from resizing the image.
