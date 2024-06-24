@@ -1,0 +1,71 @@
+[
+  {
+    "name": "Charmander",
+    "hpLevel": 39,
+    "ability": "Grass",
+    "emoji": "🌿",
+    "color": "#66CC66",
+    "moves": [
+      "Scratch",
+      "Ember",
+      "Growl",
+      "Leer"
+    ],
+    "weaknesses": [
+      "Water",
+      "Rock"
+    ]
+  },
+  {
+    "name": "Bulbasaur",
+    "hpLevel": 50,
+    "ability": "Water",
+    "emoji": "💧",
+    "color": "#6493EA",
+    "moves": [
+      "Tackle",
+      "Vine Whip",
+      "Growl",
+      "Leech Seed"
+    ],
+    "weaknesses": [
+      "Fire",
+      "Ice",
+      "Flying",
+      "Psychic"
+    ]
+  },
+  {
+    "name": "Pikachu",
+    "hpLevel": 15,
+    "ability": "Electric",
+    "emoji": "⚡️",
+    "color": "#ffce00",
+    "moves": [
+      "Quick Attack",
+      "Thunderbolt",
+      "Tail Whip",
+      "Growl"
+    ],
+    "weaknesses": [
+      "Ground"
+    ]
+  },
+  {
+    "name": "Squirtle",
+    "hpLevel": 105,
+    "ability": "Fire",
+    "emoji": "🔥",
+    "color": "#ff9a00",
+    "moves": [
+      "Tackle",
+      "Water Gun",
+      "Tail Whip",
+      "Withdraw"
+    ],
+    "weaknesses": [
+      "Electric",
+      "Grass"
+    ]
+  }
+]
