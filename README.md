@@ -29,6 +29,12 @@
       - [Platform module (When small part of the component is platform specific)](#platform-module-when-small-part-of-the-component-is-platform-specific)
       - [Platorm-specific file extensions (More complex senarios)](#platorm-specific-file-extensions-more-complex-senarios)
   - [Pokemon cards image crop issue](#pokemon-cards-image-crop-issue)
+  - [Lists](#lists)
+    - [Using `map` function](#using-map-function)
+    - [FlatList component](#flatlist-component)
+      - [Cababilities](#cababilities)
+      - [Syntax](#syntax)
+    - [SectionList component](#sectionlist-component)
 
 <!-- /TOC -->
 <!-- /TOC -->
@@ -255,7 +261,7 @@ Highlighted props:
 3. hidden (to hide the statusBar, can take some true/false value)
 
 > [!NOTE]
-> `backgroundColor` prop is specific for `Android`. but we can just the font color on both platforms using `barStyle` prop.
+> `backgroundColor` prop is specific for `Android`. but we can adjust the font color on both platforms using `barStyle` prop.
 
 > [!NOTE]
 > barStyle="default" (default value) this corresponds to `dark text on ios` and `light text on android`.
@@ -870,3 +876,81 @@ const styles = StyleSheet.create({
 ## Pokemon cards image crop issue
 
 > using resizeMode="contain" prop in Image component should fix the bugs issued from resizing the image.
+
+## Lists
+
+### Using `map` function
+
+### FlatList component
+
+The best choice to render large lists with thousands of items.
+Renders only the items currently in view, making it highly performant for long lists.
+
+> [!NOTE] Generation in advance
+> It generates a few devices length of content to insure smooth scrolling. 
+
+#### Cababilities
+1. Fully cross-platform
+2. Supports horizontal mode
+3. Header, Footer, and separator support
+4. Empty list alternative support
+  
+#### Syntax
+```javascript
+<FlatList
+  data={
+    // Mandatory
+    // List to be displayed
+  } 
+  renderItem={
+    // Mandatory
+    // Function:
+    //    Args:
+    //      1. item: current item
+    //      2. index: index of the current item
+    //      3. separators: object of functions
+    //    Returns:
+    //      JSX describes how each item should be displayed
+  }
+  keyExtractor={
+    // Optional
+    // Function:
+    //    Args:
+    //      item: current item
+    //      item, index: current item, current index
+    //    Returns:
+    //      unique string for each item, plays as the key of this item
+    //    notes:
+    //      a. Has priority over key prop if used with the JSX returned from renderItem
+    //      b. If not used:
+    //        1. by default returns item.key
+    //        2. if item.key not exist return item.id
+    //        3. if item.id returns item index as react does
+    //      c. If used:
+    //        must return a unique string for each item
+  }
+  ItemSeparatorComponent={
+    // Optional
+    // JSX element to be displayed between items
+    // Can  also be a function returns some JSX and takes custom props (Not intersted for me now)
+  }
+  ListHeaderComponent={
+    // Optional
+    // JSX element to be displayed at start of the list
+  }
+  ListFooterComponent={
+    // Optional
+    // JSX element to be displayed at end of the list
+    // can be used to display pagination controls
+  }
+  ListEmptyComponent= {
+    // Optional
+    // JSX element to be displayed if the list is empty
+  }
+  horizontal={true / false} // horizontal display
+/>
+```
+
+### SectionList component
+
+A performant component designed for rendering section list.
