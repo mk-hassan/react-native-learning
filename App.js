@@ -1,23 +1,31 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, StatusBar, FlatList, Platform, TouchableHighlight, style } from "react-native";
+import { SafeAreaView, SectionList, StyleSheet, Text, View, StatusBar, FlatList, Platform, TouchableHighlight, style } from "react-native";
 import PokemonData from './data.json';
+import sections from './grouped-data.json'
 
 export default function App() {
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        data={PokemonData.slice(0, 3)}
-        renderItem={(data) => {
-          return <View key={data.item.id}>
-            <Text>{data.item.type}</Text>
-            <Text>{data.item.name}</Text>
-          </View>
-        }}
-        ItemSeparatorComponent={data => {
-          console.log(data);
-          return <Text>{data.leadingItem.name}</Text>;
-        }}
-        Header
-      />
+      <View style={{ paddingLeft: 10 }}>
+        <SectionList
+          sections={sections.slice(0, 1)}
+          renderItem={data => {
+            return <Text>{data.item}</Text>
+          }}
+          renderSectionHeader={data => {
+            return <Text>{data.section.type}</Text>
+          }}
+          ItemSeparatorComponent={() => { return <View style={{ backgroundColor: "red", height: 5 }} /> }}
+          SectionSeparatorComponent={() => { return <View style={{ backgroundColor: "green", height: 5 }} /> }}
+        />
+        {/* <FlatList
+          data={PokemonData.slice(0, 3)}
+          renderItem={(data) => {
+            return <Text>{data.index}</Text>
+          }}
+          keyExtractor={(data, idx) => { return "kamal" + idx; }}
+          ItemSeparatorComponent={<View style={{ backgroundColor: "red", height: 5 }} />}
+        /> */}
+      </View>
     </SafeAreaView>
   );
 }

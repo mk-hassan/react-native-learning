@@ -35,6 +35,7 @@
       - [Cababilities](#cababilities)
       - [Syntax](#syntax)
     - [SectionList component](#sectionlist-component)
+      - [Syntax](#syntax-1)
 
 <!-- /TOC -->
 <!-- /TOC -->
@@ -905,7 +906,7 @@ Renders only the items currently in view, making it highly performant for long l
   renderItem={
     // Mandatory
     // Function:
-    //    Args:
+    //    Args (Object):
     //      1. item: current item
     //      2. index: index of the current item
     //      3. separators: object of functions
@@ -954,3 +955,44 @@ Renders only the items currently in view, making it highly performant for long l
 ### SectionList component
 
 A performant component designed for rendering section list.
+
+> [!WARNING] Data porperty
+> It's crucial to exist a property with the name `data`, as that's what the SectionList expects. if your api data set has no `data` property you must transform your data.
+
+> [!NOTE]
+> The word Item in the context of SectionList is meant to be each item in the data list of each section.
+
+#### Syntax
+```javascript
+<SectionList
+  sections={
+    // Mandatory
+    // List of sections to be displayed
+  }
+  renderItem={
+    // Mandatory
+    // Function:
+    //    Args (Object):
+    //      1. section: the whole section
+    //      2. item: refers to each element of "data" array from the current section
+    //      3. index: index of the current item
+    //      4. separators: object of functions
+    //    Returns:
+    //      JSX describes how each item should be displayed
+  }
+  renderSectionHeader={
+    // Optional
+    // Function:
+    //    Args (Object):
+    //      section // current section
+  }
+  ItemSeparatorComponent={
+    // Optional
+    // Function returns JSX and takes custom props
+  }
+  SectionSeparatorComponent={
+    // Optional
+    // Function returns JSX and takes custom props
+  }
+/>
+```
