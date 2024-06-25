@@ -273,6 +273,9 @@ Highlighted props:
 > [!TIP]
 > depending on the application's background color, choose the appropriate value to ensure good visibility and contrast.
 
+> [!TIP] StatusBar.currentHeight
+> This value used by convention to set paddingTop in android devices as "SafeAreaView" doesn't make any changes on android devices.
+
 ```javascript
 import { useState } from "react";
 
