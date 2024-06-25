@@ -36,6 +36,7 @@
       - [Syntax](#syntax)
     - [SectionList component](#sectionlist-component)
       - [Syntax](#syntax-1)
+  - [Froms](#froms)
 
 <!-- /TOC -->
 <!-- /TOC -->
@@ -995,4 +996,73 @@ A performant component designed for rendering section list.
     // Function returns JSX and takes custom props
   }
 />
+```
+
+## Froms
+
+In web development, we have lots of HTML elements at our disposal to capture
+user input e.g. input fields, text areas, dropdown menus, checkboxes, radio groups
+and many more.\
+The core RN library only provides TextInput and Switch
+These will be the sole focus of our learning in this section.\
+"What about the other components?"\
+Expo expands our toolkit, offering additional components like checkboxes and
+date pickers through the Expo SDK.
+
+```javascript
+import { useState } from "react";
+import { Switch, SafeAreaView, StatusBar, StyleSheet, TextInput } from "react-native";
+
+export default function App() {
+  const [name, setName] = useState();
+  const [darkMode, setMode] = useState(true);
+  return (
+    <SafeAreaView style={styles.container}>
+      <TextInput
+        style={styles.input}
+        value={name}
+        onChangeText={setName}
+        placeholder="Enter name!"
+        secureTextEntry={false}
+        keyboardType="default"
+        autoCapitalize="none"
+        autoCorrect={false}
+        clearButtonMode="while-editing" // ios-sepcific
+        selectionColor={"red"}
+        clearTextOnFocus={true}
+        defaultValue="What's your name?" // incase the initial state = "" this will take place
+      />
+      <TextInput
+        style={[styles.input, { minHeight: 100, textAlignVertical: "top" /* to avoid initial position between android and ios */ }]}
+        multiline={true}
+      />
+      <Switch
+        value={darkMode}
+        onValueChange={() => setMode(!darkMode)}
+        thumbColor={"red"}
+        trackColor={{ false: "black", true: "green" }}
+        ios_backgroundColor="black" // trackColor false value, not working in ios
+      />
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#ff1",
+    paddingTop: StatusBar.currentHeight
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    padding: 10,
+    borderWidth: 1,
+    backgroundColor: "#fff",
+  },
+  text: {
+    fontSize: 20,
+    padding: 12,
+  }
+});
 ```
