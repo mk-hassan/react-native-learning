@@ -37,7 +37,14 @@
     - [SectionList component](#sectionlist-component)
       - [Syntax](#syntax-1)
   - [Froms](#froms)
+  - [Naviagtion](#naviagtion)
+    - [Stack Naviagtion](#stack-naviagtion)
+      - [Navigation between screens](#navigation-between-screens)
+        - [navigation Prop](#navigation-prop)
+        - [useNavigation hook](#usenavigation-hook)
+      - [Passing data between screens](#passing-data-between-screens)
 
+<!-- /TOC -->
 <!-- /TOC -->
 <!-- /TOC -->
 
@@ -1069,3 +1076,147 @@ const styles = StyleSheet.create({
   }
 });
 ```
+
+## Naviagtion
+
+A mechanism that allows users to move across different screens, access features, and generally use your app effectively.
+
+> [!TIP] GO-TO Solution
+> In react-native a go-to solution to for handeling navigation is the [react-navigation](https://reactnavigation.org/docs/getting-started/) library.
+
+React-Navigation provides a variety of navigators like: Stack, Drawer, Tab navigators.\
+1. Stack Navigator provides a way for your app to transition between screens where
+each new screen is placed on top of a stack.\
+2. Drawer Navigator renders a navigation drawer on the side of the screen which can
+be opened and closed via gestures.\
+3. A tab navigator at the bottom of your screen lets you easily switch between
+different routes.
+
+> [!NOTE] NaviagtionContainer Wrapper
+> To work with react-naviagtion we need to wrap the whole app with `NavigationContainer` component.
+
+> [!CAUTION]
+> Don't forget to re-run the application.
+
+### Stack Naviagtion
+
+> [!NOTE] Follows a very Straight Forward principle
+> Each new screen is stacked on top of the previous one like a deck of cards. Useful in
+> scenarios where a linear flow of screens is required.
+
+> [!NOTE] Two navigators: Stack Navigator, and Native Stack Navigator
+> The Stack Navigator is a JavaScript-based navigator which offers a high degree of
+> customization, making it a great choice for apps that require a unique navigation
+> experience, this comes at the cost of performance.\
+> The Native Stack Navigator leverages the native navigation constructs of iOS and
+> Android, providing better performance and a more native feel to the transitions
+> and gestures.
+
+```javascript
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import HomeScreen from './screens/HomeScreen';
+import AboutScreen from './screens/AboutScreen'
+
+const StackNavigator = createNativeStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <StackNavigator.Navigator initialRouteName='about'>
+        <StackNavigator.Screen name='home' component={HomeScreen} />
+        <StackNavigator.Screen name='about' component={AboutScreen} />
+      </StackNavigator.Navigator>
+    </NavigationContainer>
+  )
+}
+```
+By default the top most screen within the navigator is the initial screen. You can change this by providing the name of the initial screen to `initialRouteName` prop of `StackNavigator.Navigator`.
+
+#### Navigation between screens
+
+We have 2 primary ways to handle navigations between screens:
+1. naviagtion prop
+2. useNavigation hook
+
+##### navigation Prop
+Every `screen component` (just screen components) in your application is provided with the `navigation` object prop automatically by react navigation.
+navigation prop has verious methods to initiate verious actions one of them is `navigate`.
+
+```javascript
+import { View, Text, Button } from 'react-native'
+
+export default function HomeScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text style={{ fontSize: 30, fontWeight: "bold", color: "'green" }}>Home Screen</Text>
+      <Button title="go to About" onPress={() => navigation.navigate("About")} />
+    </View>
+  )
+}
+```
+
+##### useNavigation hook
+
+> Just import it, and then use it as normal.
+```javascript
+import { View, Text, Button } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+
+export default function HomeScreen() {
+  const navigation = useNavigation();
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text style={{ fontSize: 30, fontWeight: "bold", color: "'green" }}>Home Screen</Text>
+      <Button title="go to About" onPress={() => navigation.navigate("About")} />
+    </View>
+  )
+}
+```
+
+> [!TIP] When to use `navigation prop` and `useNavigation hook`?
+> If you are within a screen component then use `navigation prop`. while useNavigation can be used within any component not just screen components, making it more flexible option when you have nested components or you are working with utility components that need to initiate navigation.
+
+#### Passing data between screens
+
+be default any screen component is provided with the `route` object prop automatically by react navigation besides the `navigagtion` prop we talked about earlier.
+```javascript
+export default function HomeScreen(props) {
+  console.log(Object.keys(props)); // ['navigation', 'route']
+  ...
+}
+```
+This `route` prop has a property called `params` which is an object contains the parameters passed to this screen from the callee component.
+
+> [!TIP] Screen initial parameters
+> You can also set a default parameter value by setting `initialParams` prop to an object speciftying the initial values when decalaring the Screen.\
+> Also you can change the params using `navigation.setParams(Object)` on the Screen itself.
+
+```javascript
+// App.js
+export default function App() {
+  return (
+    <NavigationContainer>
+      <StackNavigator.Navigator initialRouteName='Home'>
+        <StackNavigator.Screen name='Home' component={HomeScreen} />
+        <StackNavigator.Screen name='About' component={AboutScreen} initialParams={{ name: "Kamal" }} /> // here
+      </StackNavigator.Navigator>
+    </NavigationContainer>
+  )
+}
+
+// AboutScreen.js
+// when press the first button the parameter name will change
+export default function AboutScreen({ navigation, route }) {
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text style={{ fontSize: 30, fontWeight: "bold", color: "'green" }}>About {route.params?.name}</Text>
+      <Button title="change initial params" onPress={() => navigation.setParams({ name: "mahmoud" })} />
+      <Button title="go back" onPress={() => navigation.navigate("Home")} />
+    </View>
+  )
+}
+```
+
+> [!CAUTION]
+> I found it really time wasting to write about navigations, while the documentation is a easy to understand and has really good examples.
